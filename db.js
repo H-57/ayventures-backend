@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 async function connectToMongoDB() {
   try {
-    // Connection URL ENV
+    // Connection URL
     const url = process.env.MONGODB_URI;
 
     await mongoose.connect(url);
