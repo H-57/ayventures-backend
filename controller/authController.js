@@ -80,8 +80,10 @@ export async function updateUserByEmployee(req, res) {
       return res.status(500).json({ message: "fill all credentials" });
     }
 
+    const hashPassword = await bcrypt.hash(password, 10);
+
     user.name = name;
-    user.password = password;
+    user.password = hashPassword;
     await user.save();
 
     return res.status(200).json({ user: { name: user.name, email: user.email, userType: user.userType } });
@@ -151,12 +153,15 @@ export async function updateUserByAdmin(req, res) {
     if (!user) {
       return res.status(500).json({ message: "user not found" });
     }
-    const { name, password } = req.body;
+    const { name, password, userType } = req.body;
     if (!name || !password) {
       return res.status(500).json({ message: "fill all credentials" });
     }
+    const hashPassword = await bcrypt.hash(password, 10);
+
     user.name = name;
-    user.password = password;
+    user.password = hashPassword;
+    user.userType = userType;
     await user.save();
     return res.status(200).json({ user: { name: user.name, email: user.email, userType: user.userType } });
   } catch (error) {
